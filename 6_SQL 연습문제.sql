@@ -24,7 +24,7 @@ INSERT INTO `Book` VALUES (10, 'Olympic Champions', 'Pearson',    13000);
 #문제2
 CREATE TABLE `Customer`(
 		`custid`  INT AUTO_INCREMENT PRIMARY KEY,
-		`name`    VARCHAR(5)
+		`name`    VARCHAR(5),
 		`address` VARCHAR(20),
 		`phone`   VARCHAR(30)
 );
@@ -56,7 +56,7 @@ INSERT INTO `Orders`(`custid`, `bookid`, `saleprice`, `orderdate`) VALUES (2, 10
 INSERT INTO `Orders`(`custid`, `bookid`, `saleprice`, `orderdate`) VALUES (3, 8,  13000, '2014-07-10');
 
 #문제4
-SELECT `custid`, `name`, `address`, FROM `Customer`;
+SELECT `custid`, `name`, `address` FROM `Customer`;
 
 #문제5
 SELECT `bookname`, `price` FROM `Book`;
@@ -134,22 +134,102 @@ SELECT * FROM `Book` ORDER BY `price` DESC LIMIT 3;
 SELECT * FROM `Book` ORDER BY `price` ASC LIMIT 3;
 
 #문제29
+SELECT SUM(`saleprice`) AS `총판매액` FROM `Orders`;
+
 #문제30
+SELECT
+	SUM(`saleprice`) AS `총판매액`,
+	AVG(`saleprice`) AS `평균값`,
+	MIN(`saleprice`) AS `최저가`,
+	MAX(`saleprice`) AS `최고가`
+FROM
+	`orders`;
 
 #문제31
+SELECT COUNT(*) AS `판매건수` FROM `Orders`;
+
 #문제32
+SELECT 
+	`bookid`,
+	REPLACE(`bookname`, '야구', '농구') AS `bookname`,
+	`publisher`,
+	`price`
+FROM `Book`;
+
 #문제33
+SELECT `custid`, COUNT(`orderid`) AS `수량` FROM `Orders` 
+WHERE `saleprice` >= 8000
+GROUP BY `custid`
+HAVING `수량` >= 2;
+
 #문제34
+SELECT * FROM `Customer` AS a
+JOIN `Orders` AS b
+ON a.custid = b. custid
+ORDER BY a.custid;
+
+SELECT * FROM `Customer` 
+JOIN `Orders` 
+USING(`custid`);
+
+SELECT * FROM `Customer` AS a, `Orders` AS b WHERE a.custid = b. custid;
+
 #문제35
+SELECT * FROM `Customer` AS a
+JOIN `Orders` AS b
+ON a.custid = b. custid
+ORDER BY a.custid;
+
 #문제36
+SELECT `name`, `saleprice` FROM `Customer` AS a
+JOIN `Orders` AS b
+ON a.custid = b. custid
+ORDER BY a.custid;
+
 #문제37
+SELECT `name`, SUM(`saleprice`) FROM `Orders` AS a
+JOIN `Customer` AS b
+ON a.custid = b. custid
+GROUP BY a.custid
+ORDER BY `name`;
+
 #문제38
+SELECT `name`, `bookname` FROM `Customer` AS a
+JOIN `Orders` AS b ON a.custid = b.custid
+JOIN `Book` AS c ON b.bookid = c.bookid;
+
 #문제39
+SELECT `name`, `bookname` FROM `Customer` AS a
+JOIN `Orders` AS b ON a.custid = b.custid
+JOIN `Book` AS c ON b.bookid = c.bookid
+WHERE `price` = 20000;
+
 #문제40
+SELECT `name`, `saleprice` FROM `Orders` AS a
+RIGHT JOIN `Customer` AS b
+ON a.custid = b.custid;
 
 #문제41
+SELECT * FROM `Book`
+WHERE `price`=(SELECT MAX(`price`) FROM `Book`);
+
 #문제42
+SELECT `name` FROM `Customer`
+left JOIN `Orders`
+USING(`custid`)
+WHERE `orderid` IS NULL;
+
 #문제43
+SELECT SUM(`saleprice`) AS `총매출` FROM `Customer` AS a
+JOIN `Orders` AS b
+ON a.custid = b.custid
+WHERE `name`='김연아';
+
 #문제44
+INSERT `Book`(`bookid`, `bookname`, `publisher`) VALUES(11, '스포츠의학', '한솔의학서적');
+
 #문제45
+UPDATE `Customer` SET `address`='대한민국 부산' WHERE `custid`=5;
+
 #문제46
+DELETE FROM `Customer` WHERE `custid`=5;
